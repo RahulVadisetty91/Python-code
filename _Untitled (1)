@@ -1,0 +1,75 @@
+#format  == floor.room , max people [time] 
+
+data = [
+		[7.11,8,[["9:00","9:15"],["14:30","15:00"]]] ,
+		[8.23,6,[["10.00","11:00"],["14:00","15:00"]]] ,
+		[8.43,7,[["11.30","12:30"],["17:00","17:30"]]] ,
+		[9.511,9,[["9.30","10:30"],["12:00","12:15"],["15:15","16:15"]]] ,
+		[9.527,4,[["9:00","11:00"],["14:00","16:00" ]]],
+		[9.547,8,[["10:30","11:30"],["13:30","15:30"],["16:30","17:30"]]]
+		]
+
+starting_floor = 7
+ending_floor = 9
+found_status = 0
+
+def getting_time(for_which) :
+	flag = 0
+	s_m = ""
+	s_h = ""
+	for char in str(for_which) :
+		if char in (":" , ".") :
+			flag = 1
+			continue
+
+		if flag == 0 :
+			s_h = s_h + char
+		else :
+			s_m = s_m + char
+
+	if s_m == "" :
+		s_m = "00"
+	return [int(s_h),int(s_m)]
+
+def found(i):
+	print("\ntime slot is availabe at floor "+ str(getting_time(i)[0]) +" in room " + str(getting_time(i)[1]) )
+	print("\nout put as per you wanted = " + str(i))
+
+def searching(location) : 
+	for i in data :
+			if getting_time(i[0])[0] == location :
+				if members <= i[1] :
+					for slot in i[2] :
+						if starting_time[0] == getting_time(slot[0])[0] and starting_time[1] == getting_time(slot[0])[1] :
+							if ending_time[0] == getting_time(slot[1])[0] and ending_time[1] == getting_time(slot[1])[1] :
+								found(i[0])
+								found_status = 1
+								return
+
+starting_time = getting_time(input("slot booking from = "))
+ending_time = getting_time(input("slot booking upto = "))
+members = int(input("no of members = "))
+prefered_location = int(input("at which floor = "))
+
+searching(prefered_location)
+upper_highest = 0
+lower_highest = 0
+traverse = 1
+
+while(found_status == 0) :
+	if prefered_location + traverse > ending_floor :
+		upper_highest = 1
+	else :
+ 		searching(prefered_location + traverse)
+
+	if prefered_location - traverse < starting_floor :
+		lower_highest = 1
+	else :
+ 		searching(prefered_location - traverse)
+
+	if upper_highest == 1 and lower_highest == 1 :
+		found_status = 1
+	traverse = traverse + 1
+
+if found_status == 0 :
+	print("no rooms found for prefered time slot")
